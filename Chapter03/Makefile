@@ -1,15 +1,14 @@
 install:
-	@sudo apt-get install gcovr lcov
+	sudo apt-get install gcovr lcov pkg-config curl zip unzip tar ccache
 
 install_doc:
-	@pip install jinja2 Pygments
-	@sudo apt-get install doxygen
+	pip install jinja2 Pygments
+	sudo apt-get install doxygen
 
 setup:
-	@pip install conan
-	@conan user
+	pip install conan
+	conan user
 
 prepare:
-	@rm -rf build
-	@mkdir build
-	@cd build && conan install ../11_CodeCoverage/ && cd ..
+	rm -rf build
+	mkdir build
