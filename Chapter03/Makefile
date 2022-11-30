@@ -1,5 +1,5 @@
 install:
-	sudo apt-get install gcovr lcov pkg-config curl zip unzip tar ccache
+	sudo apt-get install gcovr lcov
 
 install_doc:
 	pip install jinja2 Pygments
@@ -12,3 +12,4 @@ setup:
 prepare:
 	rm -rf build
 	mkdir build
+	cd build && conan install ../11_CodeCoverage/ && cd ..
