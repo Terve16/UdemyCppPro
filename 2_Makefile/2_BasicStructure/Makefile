@@ -8,4 +8,8 @@ my_lib.o:
 	g++ my_lib.cc -c
 
 execute:
-	main.exe
+	./main
+
+clean:
+	rm -f *.o
+	rm -f main
