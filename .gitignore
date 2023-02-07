@@ -1,9 +1,18 @@
 ################################
 ###########  FILES  ############
 ################################
-TODO*.*
+# Ignore all
+*
+# Unignore all with extensions
+!*.*
+# Unignore all dirs
+!*/
+!.gitkeep
+!Makefile
 *.pptx
+*.stackdump
 *.pdf
+!LICENSE
 
 ################################
 ########### FOLDERS ############
@@ -11,6 +20,8 @@ TODO*.*
 build/
 html/
 lectures/
+linalg/
+loguru/
 
 ################################
 ############ C/C++ #############
