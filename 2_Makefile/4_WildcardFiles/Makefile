@@ -1,43 +1,58 @@
 ##################
 ## VARIABLES	##
 ##################
-DEBUG ?= 1
-ifneq ($(DEBUG), 1)
-CPP_COMPILER_FLAGS = -g -O0 -Wall -Wextra -Wpedantic -Wconversion -std=c++17
-EXECUTABLE_NAME = mainDebug
+# Note: Variables can only be strings
+# Note: Single or double quotes for variable names or values have no meaning to Makefile
+
+
+# CC: Program for compiling C programs; default cc
+# CXX: Program for compiling C++ programs; default g++
+
+# CFLAGS: Extra flags to give to the C compiler
+# CXXFLAGS: Extra flags to give to the C++ compiler
+# CPPFLAGS: Extra flags to give to the C preprocessor
+# LDFLAGS: Extra flags to give to the linker
+
+DEBUG = 1
+EXECUTABLE_NAME = main
+
+CXX_STANDARD = c++17
+CXX = g++
+CXXWARNINGS = -Wall -Wextra -Wpedantic
+CXXFLAGS = $(CXXWARNINGS) -std=$(CXX_STANDARD)
+CPPFLAGS =
+LDFLAGS =
+
+ifeq ($(DEBUG), 1)
+CXXFLAGS += -g -O0
 else
-CPP_COMPILER_FLAGS = -O3 -Wall -Wextra -Wpedantic -Wconversion -std=c++17
-EXECUTABLE_NAME = mainRelease
+CXXFLAGS += -O3
 endif
 
-CPP_COMPILER = g++
-CPP_COMPILER_CALL = $(CPP_COMPILER) $(CPP_COMPILER_FLAGS)
+COMPILER_CALL = $(CXX) $(CXXFLAGS)
 
-CPP_SRCS = $(wildcard *.cpp)
-CPP_OBJECTS = $(patsubst %.cpp, %.o, $(CPP_SRCS))
-
-CC_SRCS = $(wildcard *.cc)
-CC_OBJECTS = $(patsubst %.cc, %.o, $(CC_SRCS))
-
-######################
-## PSEUDO TARGETS	##
-######################
-build: $(EXECUTABLE_NAME)
+CXX_SOURCES = $(wildcard *.cc)
+CXX_OBJECTS = $(patsubst %.cc, %.o, $(CXX_SOURCES))
 
 ##################
 ## TARGETS		##
 ##################
-$(EXECUTABLE_NAME): $(CC_OBJECTS) $(CPP_OBJECTS)
-	$(CPP_COMPILER_CALL) $^ -o $@ $(EXECUTABLE_NAME)
+
+build: $(CXX_OBJECTS)
+	$(COMPILER_CALL) $(CXX_OBJECTS) -o $(EXECUTABLE_NAME)
 
 execute:
-	$(EXECUTABLE_NAME).exe
+	./$(EXECUTABLE_NAME)
+
+clean:
+	rm -f *.o
+	rm -f $(EXECUTABLE_NAME)
 
 ##################
 ## PATTERNS		##
 ##################
-%.o: %.cpp
-	$(CPP_COMPILER_CALL) -c $< -o $@
-
+# $@: the file name of the target
+# $<: the name of the first dependency
+# %: wildcard
 %.o: %.cc
-	$(CPP_COMPILER_CALL) -c $< -o $@
+	$(COMPILER_CALL) -c $< -o $@

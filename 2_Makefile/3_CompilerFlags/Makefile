@@ -1,29 +1,53 @@
 ##################
 ## VARIABLES	##
 ##################
+# Note: Variables can only be strings
+# Note: Single or double quotes for variable names or values have no meaning to Makefile
 
-DEBUG ?= 1
 
-ifneq ($(DEBUG), 1)
-CPP_COMPILER_FLAGS = -g -O0 -Wall -Wextra -Wpedantic -Wconversion -std=c++17
-EXECUTABLE_NAME = mainDebug
+# CC: Program for compiling C programs; default cc
+# CXX: Program for compiling C++ programs; default g++
+
+# CFLAGS: Extra flags to give to the C compiler
+# CXXFLAGS: Extra flags to give to the C++ compiler
+# CPPFLAGS: Extra flags to give to the C preprocessor
+# LDFLAGS: Extra flags to give to the linker
+
+DEBUG = 1
+EXECUTABLE_NAME = main
+
+CXX_STANDARD = c++17
+CXX = g++
+CXXWARNINGS = -Wall -Wextra -Wpedantic
+CXXFLAGS = $(CXXWARNINGS) -std=$(CXX_STANDARD)
+CPPFLAGS =
+LDFLAGS =
+
+ifeq ($(DEBUG), 1)
+CXXFLAGS += -g -O0
 else
-CPP_COMPILER_FLAGS = -O3 -Wall -Wextra -Wpedantic -Wconversion -std=c++17
-EXECUTABLE_NAME = mainRelease
+CXXFLAGS += -O3
 endif
 
-CPP_COMPILER = g++
-CPP_COMPILER_CALL = $(CPP_COMPILER) $(CPP_COMPILER_FLAGS)
+COMPILERCALL = $(CXX) $(CXXFLAGS)
 
 ##################
 ## TARGETS		##
 ##################
 
-build: my_lib.o
-	$(CPP_COMPILER_CALL) main.cc my_lib.o -o $(EXECUTABLE_NAME)
+build: main.o my_lib.o
+	$(COMPILERCALL) main.o my_lib.o -o $(EXECUTABLE_NAME)
+
+main.o:
+	$(COMPILERCALL) main.cc -c
+
 
 my_lib.o:
-	$(CPP_COMPILER_CALL) my_lib.cc -c
+	$(COMPILERCALL) my_lib.cc -c
 
 execute:
-	$(EXECUTABLE_NAME).exe
+	./$(EXECUTABLE_NAME)
+
+clean:
+	rm -f *.o
+	rm -f $(EXECUTABLE_NAME)
